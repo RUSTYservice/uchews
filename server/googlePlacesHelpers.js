@@ -45,10 +45,13 @@ const handleQueries = function(body, cb) {
           let rankedRest = handleRestaurants.rankRestaurant(responses[i].data, body.budget);
           //filter out restaurants outside the input search radius
           rankedRest = findDistance.filterByDist(rankedRest, lat, lng, radius);
+          for (let j = 0; j < rankedRest.length; j++) {
+            rankedRest[j].cuisine = rankedCuisines[i];
+          }
           restaurants.push(rankedRest);
-          restaurants[i].map((restaurant) => {
-            restaurant.cuisine = rankedCuisines[i];
-          });
+          // restaurants[i].map((restaurant) => {
+          //   restaurant.cuisine = rankedCuisines[i];
+          // });
         }
         cb(restaurants);
       });

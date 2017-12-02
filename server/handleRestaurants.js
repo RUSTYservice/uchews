@@ -1,22 +1,26 @@
 //rankCuisine: pick the top three types of cuisine based on counts of wantToEat and willNotEat, for each type of wantToEat +1, for each type of willNotEat -1.
 const rankCuisine = function(body) {
+  const types = ['American', 'Asian', 'Chinese', 'Dessert', 'Greek', 'Hamburgers', 'Healthy', 'Indian',
+                 'Italian', 'Japanese', 'Mediterranean', 'Mexican', 'Middle Eastern', 'Pasta', 'Pizza',
+                 'Salads', 'Sandwiches', 'Seafood', 'Soup', 'Sushi', 'Thai', 'Vegetarian', 'Wings', 'Wraps'];
+
   let cuisineTypeCounter = {};
+  for (let i = 0; i < types.length; i++) {
+    cuisineTypeCounter[types[i]] = 0;
+  }
+
   const wantToEat = body.wantToEat;
   wantToEat.forEach((wantToEatType) => {
-    cuisineTypeCounter[wantToEatType] ? cuisineTypeCounter[wantToEatType]++ : cuisineTypeCounter[wantToEatType] = 1;
+    cuisineTypeCounter[wantToEatType]++;
   });
   const willNotEat = body.willNotEat;
   willNotEat.forEach((willNotEatType) => {
-    cuisineTypeCounter[willNotEatType] ? cuisineTypeCounter[willNotEatType]-- : cuisineTypeCounter[willNotEatType] = -1;
+    cuisineTypeCounter[willNotEatType]--;
   });
   cuisineTypeSorted = Object.keys(cuisineTypeCounter).sort((a, b) => {
     return cuisineTypeCounter[b] - cuisineTypeCounter[a];
   });
-  const results = cuisineTypeSorted.slice();
-  if(results.length < 3) {
-    return results;
-  }
-  return results.slice(0, 3);
+  return cuisineTypeSorted.slice(0, 3);
 };
 
 

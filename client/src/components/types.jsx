@@ -19,37 +19,48 @@ const style = {
   },
 };
 
-const Types = (props) => {
-  const types = ['American', 'Asian', 'Chinese', 'Dessert', 'Greek', 'Hamburgers', 'Healthy', 'Indian',
-                 'Italian', 'Japanese', 'Mediterranean', 'Mexican', 'Middle Eastern', 'Pasta', 'Pizza',
-                 'Salads', 'Sandwiches', 'Seafood', 'Soup', 'Sushi', 'Thai', 'Vegetarian', 'Wings', 'Wraps'];
+class Types extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      types: ['American', 'Asian', 'Chinese', 'Dessert', 'Greek', 'Hamburgers', 'Healthy', 'Indian',
+              'Italian', 'Japanese', 'Mediterranean', 'Mexican', 'Middle Eastern', 'Pasta', 'Pizza',
+              'Salads', 'Sandwiches', 'Seafood', 'Soup', 'Sushi', 'Thai', 'Vegetarian', 'Wings', 'Wraps'],
+    };
+  }
 
-  return (
-    <div>
+  render() {
+    // this doesn't hold its context inside the map function
+    var that = this;
+
+    return (
+      <div>
       <Paper style={style.paper} zDepth={3}>
-        <h1>Chewser #{props.counter}</h1>
+        <h1>Chewser #{this.props.counter}</h1>
         <h2>What are you in the mood for?</h2>
         <div style={style.container}>
-          {types.map(function(type) {
-             return <Check name={"wantToEat"}
-                           type={type}
-                           choose={props.wantToEat} />
-           })}
+          {this.state.types.map(function(type) {
+            return <Check name={"wantToEat"}
+                          type={type}
+                          choose={that.props.wantToEat} />
+          })}
         </div>
         <h2>Any dealbreakers?</h2>
         <div style={style.container}>
-          {types.map(function(type) {
-             return <Check name={"willNotEat"}
-                           type={type}
-                           choose={props.willNotEat} />
-           })}
+          {this.state.types.map(function(type) {
+            return <Check name={"willNotEat"}
+                          type={type}
+                          choose={that.props.willNotEat} />
+          })}
         </div>
         <RaisedButton label="Next"
                       primary={true}
-                      onClick={() => props.clickHandle("waiting") } />
+                      onClick={ () => this.props.clickHandle("waiting") } />
       </Paper>
-    </div>
-  );
+      </div>
+    );
+  }
+
 }
 
 export default Types;
