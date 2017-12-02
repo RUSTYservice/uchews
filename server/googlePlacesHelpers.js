@@ -48,7 +48,7 @@ const handleQueries = function(body, cb) {
       return requestRestaurants(cuisine, lat, lng);
     }))
       .then((responses) => {
-        const restaurants = [];
+        var restaurants = [];
         //aggregate the resulting restaurants into a restaurant matrix and add a cuisine property to each restaurant
         for (let i = 0; i < responses.length; i++) {
           //rank the returned restaurants in accordance with the users' input preferences
@@ -58,10 +58,23 @@ const handleQueries = function(body, cb) {
           for (let j = 0; j < rankedRest.length; j++) {
             rankedRest[j].cuisine = rankedCuisines[i];
           }
-          // restaurants.push(rankedRest);
           restaurants.push(rankedRest[0]);
         }
-        cb(restaurants);
+        var output = [];
+        Promise.map(restaurants, (restaurant) => {
+          return yelpClient.search({
+            term: restaurant.name,
+            location: restaurant.formatted_address,
+          }).then((yelpResult) => {
+            return yelpClient.reviews(yelpResult.jsonBody.businesses[0].id).then((yelpReviews) => {
+              output.push([restaurant, yelpReviews]);
+            }).catch((err) => {
+              return console.error(err);
+            });
+          })
+        }).then(() => {
+          cb(output);
+        })
       });
   });
 }

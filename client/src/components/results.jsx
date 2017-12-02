@@ -25,16 +25,16 @@ const Results = ({ results }) => {
         <MapsContainer results={results}/>
         <div style={style.separator}></div>  {/* this provides the buffer between the map and the results */}
         <h1>#1</h1>                          {/* otherwise the map will overlap the results */}
-        <h2>{results[0].name}</h2>
-        {results[0].formatted_address}
+        <h2>{results[0][0].name}</h2>
+        {results[0][0].formatted_address}
 
         <h1>#2</h1>
-        <h2>{results[1].name}</h2>
-        {results[1].formatted_address}
+        <h2>{results[1][0].name}</h2>
+        {results[1][0].formatted_address}
 
         <h1>#3</h1>
-        <h2>{results[2].name}</h2>
-        {results[2].formatted_address}
+        <h2>{results[2][0].name}</h2>
+        {results[2][0].formatted_address}
       </Paper>
     </div>
   );

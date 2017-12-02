@@ -45,30 +45,30 @@ class MapContainer extends React.Component {
            style={style.map}
            zoom={12}
            initialCenter={{
-             lat: this.props.results[0].geometry.location.lat,
-             lng: this.props.results[0].geometry.location.lng
+             lat: this.props.results[0][0].geometry.location.lat,
+             lng: this.props.results[0][0].geometry.location.lng
            }}>
         <Marker
           label={`#1`}
           title={`Choice 1`}
           onClick={this.onMarkerClick}
-          name={this.props.results[0].name}
-          address={this.props.results[0].formatted_address}
-          position={{lat: this.props.results[0].geometry.location.lat, lng: this.props.results[0].geometry.location.lng}} />
+          name={this.props.results[0][0].name}
+          address={this.props.results[0][0].formatted_address}
+          position={{lat: this.props.results[0][0].geometry.location.lat, lng: this.props.results[0][0].geometry.location.lng}} />
         <Marker
           label={`#2`}
           title={`Choice 2`}
           onClick={this.onMarkerClick}
-          name={this.props.results[1].name}
-          address={this.props.results[1].formatted_address}
-          position={{lat: this.props.results[1].geometry.location.lat, lng: this.props.results[1].geometry.location.lng}} />
+          name={this.props.results[1][0].name}
+          address={this.props.results[1][0].formatted_address}
+          position={{lat: this.props.results[1][0].geometry.location.lat, lng: this.props.results[1][0].geometry.location.lng}} />
         <Marker
           label={`#3`}
           title={`Choice 3`}
           onClick={this.onMarkerClick}
-          name={this.props.results[2].name}
-          address={this.props.results[2].formatted_address}
-          position={{lat: this.props.results[2].geometry.location.lat, lng: this.props.results[2].geometry.location.lng}} />
+          name={this.props.results[2][0].name}
+          address={this.props.results[2][0].formatted_address}
+          position={{lat: this.props.results[2][0].geometry.location.lat, lng: this.props.results[2][0].geometry.location.lng}} />
 
         <InfoWindow
           marker={this.state.activeMarker}
