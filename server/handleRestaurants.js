@@ -1,3 +1,5 @@
+const _ = require('underscore');
+
 //rankCuisine: pick the top three types of cuisine based on counts of wantToEat and willNotEat, for each type of wantToEat +1, for each type of willNotEat -1.
 const rankCuisine = function(body) {
   const types = ['American', 'Asian', 'Chinese', 'Dessert', 'Greek', 'Hamburgers', 'Healthy', 'Indian',
@@ -17,10 +19,31 @@ const rankCuisine = function(body) {
   willNotEat.forEach((willNotEatType) => {
     cuisineTypeCounter[willNotEatType]--;
   });
-  cuisineTypeSorted = Object.keys(cuisineTypeCounter).sort((a, b) => {
-    return cuisineTypeCounter[b] - cuisineTypeCounter[a];
+
+  let groups = _.groupBy(types, (type) => {
+    return cuisineTypeCounter[type];
   });
-  return cuisineTypeSorted.slice(0, 3);
+
+  const output = [];
+
+  const sorted = _.sortBy(Object.entries(groups), (tuple) => {
+    // return the additive inverse of the count to get descending order
+    return -tuple[0];
+  });
+
+  var j = 0;
+  while (output.length < 3 && j < sorted.length) {
+    // make a randomized copy of subarray
+    var k = 0;
+    var randomized = _.shuffle(sorted[j][1]);
+    while (output.length < 3 && k < randomized.length) {
+      output.push(randomized[k]);
+      k++;
+    }
+    j++;
+  }
+
+  return output;
 };
 
 
