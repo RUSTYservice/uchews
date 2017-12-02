@@ -2,13 +2,16 @@ const axios = require('axios');
 const Nodegeocoder = require('node-geocoder');
 const handleRestaurants = require('./handleRestaurants.js');
 const findDistance = require('./findDistance.js');
+const Promise = require('bluebird');
 const yelp = require('yelp-fusion');
 
-yelp.accessToken(YELP_CLIENT_ID, YELP_CLIENT_SECRET).then((res) => {
-  console.log(res.jsonBody.access_token);
-}).catch((err) => {
-  return console.error(err);
-});
+const yelpClient = yelp.client(process.env.YELP_CLIENT_TOKEN);
+
+// yelp.accessToken(process.env.YELP_CLIENT_ID, process.env.YELP_CLIENT_SECRET).then((res) => {
+//   console.log(res.jsonBody.access_token);
+// }).catch((err) => {
+//   return console.error(err);
+// });
 
 //returns a promise to a query url for each cuisine type to be searched
 const requestRestaurants = function(cuisine, latitude, longitude, radius) {
@@ -55,7 +58,8 @@ const handleQueries = function(body, cb) {
           for (let j = 0; j < rankedRest.length; j++) {
             rankedRest[j].cuisine = rankedCuisines[i];
           }
-          restaurants.push(rankedRest);
+          // restaurants.push(rankedRest);
+          restaurants.push(rankedRest[0]);
         }
         cb(restaurants);
       });
