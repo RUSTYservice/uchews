@@ -2,6 +2,16 @@ const axios = require('axios');
 const Nodegeocoder = require('node-geocoder');
 const handleRestaurants = require('./handleRestaurants.js');
 const findDistance = require('./findDistance.js');
+const Promise = require('bluebird');
+const yelp = require('yelp-fusion');
+
+const yelpClient = yelp.client(process.env.YELP_CLIENT_TOKEN);
+
+// yelp.accessToken(process.env.YELP_CLIENT_ID, process.env.YELP_CLIENT_SECRET).then((res) => {
+//   console.log(res.jsonBody.access_token);
+// }).catch((err) => {
+//   return console.error(err);
+// });
 
 //returns a promise to a query url for each cuisine type to be searched
 const requestRestaurants = function(cuisine, latitude, longitude, radius) {
@@ -38,19 +48,33 @@ const handleQueries = function(body, cb) {
       return requestRestaurants(cuisine, lat, lng);
     }))
       .then((responses) => {
-        const restaurants = [];
+        var restaurants = [];
         //aggregate the resulting restaurants into a restaurant matrix and add a cuisine property to each restaurant
         for (let i = 0; i < responses.length; i++) {
           //rank the returned restaurants in accordance with the users' input preferences
           let rankedRest = handleRestaurants.rankRestaurant(responses[i].data, body.budget);
           //filter out restaurants outside the input search radius
           rankedRest = findDistance.filterByDist(rankedRest, lat, lng, radius);
-          restaurants.push(rankedRest);
-          restaurants[i].map((restaurant) => {
-            restaurant.cuisine = rankedCuisines[i];
-          });
+          for (let j = 0; j < rankedRest.length; j++) {
+            rankedRest[j].cuisine = rankedCuisines[i];
+          }
+          restaurants.push(rankedRest[0]);
         }
-        cb(restaurants);
+        var output = [];
+        Promise.map(restaurants, (restaurant) => {
+          return yelpClient.search({
+            term: restaurant.name,
+            location: restaurant.formatted_address,
+          }).then((yelpResult) => {
+            return yelpClient.reviews(yelpResult.jsonBody.businesses[0].id).then((yelpReviews) => {
+              output.push([restaurant, yelpReviews]);
+            }).catch((err) => {
+              return console.error(err);
+            });
+          })
+        }).then(() => {
+          cb(output);
+        })
       });
   });
 }

@@ -58,7 +58,7 @@ class Types extends React.Component {
                       onClick={ () => this.props.clickHandle("waiting") } />
       </Paper>
       </div>
-    )
+    );
   }
 
 }
