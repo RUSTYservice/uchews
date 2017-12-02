@@ -48,7 +48,8 @@
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "underscore": "^1.8.3",
-    "webpack": "^3.8.1"
+    "webpack": "^3.8.1",
+    "yelp-fusion": "^1.0.4"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
